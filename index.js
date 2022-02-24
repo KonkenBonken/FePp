@@ -1,4 +1,5 @@
-// import { minify as Terser } from "terser";
+// import { minify as MinifyJS } from "terser"; // possible future use
+// import { minify as MinifyCSS } from 'csso'; // possible future use
 import uniqueString from 'unique-slug';
 import { JSDOM } from "jsdom";
 
