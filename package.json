@@ -1,0 +1,16 @@
+{
+  "name": "fepp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KonkenBonken/FePp.git"
+  },
+  "author": "Konrad Pettersson",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "jsdom": "^19.0.0"
+  }
+}
