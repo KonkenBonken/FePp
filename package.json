@@ -1,8 +1,11 @@
 {
   "name": "fepp",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "index.js",
+  "scripts": {
+    "readme": "node readme.js && git commit readme.md -m \"readme updated\""
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/KonkenBonken/FePp.git"
@@ -12,5 +15,8 @@
   "type": "module",
   "dependencies": {
     "jsdom": "^19.0.0"
+  },
+  "devDependencies": {
+    "jsdoc-to-markdown": "^7.1.1"
   }
 }
