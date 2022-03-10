@@ -1,222 +1,62 @@
-<a name="Fepp"></a>
+## Functions
 
-## Fepp
-**Kind**: global class  
-**See**: setClass  
+<dl>
+<dt><a href="#newDocument">newDocument()</a> ⇐ <code><a href="#external_document">document</a></code></dt>
+<dd><p>Creates an instance of Document.
+Is ran once at setup</p>
+</dd>
+<dt><a href="#newElement">newElement([tagName], [...classList])</a> ⇐ <code><a href="#external_element">element</a></code></dt>
+<dd><p>Creates an instance of Element.</p>
+</dd>
+</dl>
 
-* [Fepp](#Fepp)
-    * [new Fepp([tagName], [...classList])](#new_Fepp_new)
-    * _instance_
-        * [.classes](#Fepp+classes) : <code>Array.&lt;string&gt;</code>
-        * [.innerHTML](#Fepp+innerHTML) : <code>string</code>
-        * [.attributes](#Fepp+attributes) : <code>Array.&lt;string&gt;</code>
-        * [.id](#Fepp+id) : <code>string</code>
-        * [.src](#Fepp+src) : <code>string</code>
-        * [.type](#Fepp+type) : <code>string</code>
-        * [.value](#Fepp+value) : <code>string</code>
-        * [.addClass(...classList)](#Fepp+addClass) ⇒
-        * [.setClass(...classList)](#Fepp+setClass) ⇒
-        * [.removeClass(...classList)](#Fepp+removeClass) ⇒
-        * [.setHTML(html)](#Fepp+setHTML) ⇒
-        * [.setAttribute(name, value)](#Fepp+setAttribute) ⇒
-        * [.setId(id)](#Fepp+setId) ⇒
-        * [.setSrc(src)](#Fepp+setSrc) ⇒
-        * [.setType(type)](#Fepp+setType) ⇒
-        * [.setValue(value)](#Fepp+setValue) ⇒
-        * [.addJs(function, ...arguments)](#Fepp+addJs) ⇒
-        * [.addCss(styles)](#Fepp+addCss) ⇒
-    * _static_
-        * [.render()](#Fepp.render) ⇒ <code>string</code>
+## External
 
-<a name="new_Fepp_new"></a>
+<dl>
+<dt><a href="#external_document">document</a></dt>
+<dd><p>The document class from jsdom.</p>
+</dd>
+<dt><a href="#external_element">element</a></dt>
+<dd><p>The element class from jsdom.</p>
+</dd>
+</dl>
 
-### new Fepp([tagName], [...classList])
+<a name="newDocument"></a>
+
+## newDocument() ⇐ [<code>document</code>](#external_document)
+Creates an instance of Document.Is ran once at setup
+
+**Kind**: global function  
+**Extends**: [<code>document</code>](#external_document)  
+<a name="newElement"></a>
+
+## newElement([tagName], [...classList]) ⇐ [<code>element</code>](#external_element)
 Creates an instance of Element.
 
+**Kind**: global function  
+**Extends**: [<code>element</code>](#external_element)  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| [tagName] | <code>string</code> | <code>&quot;&#x27;div&#x27;&quot;</code> | The desired radius of the circle. |
+| [tagName] | <code>string</code> | <code>&quot;div&quot;</code> | The tag type. |
 | [...classList] | <code>string</code> |  | Class to apply to element. |
 
-<a name="Fepp+classes"></a>
+<a name="external_document"></a>
 
-### fepp.classes : <code>Array.&lt;string&gt;</code>
-**Kind**: instance property of [<code>Fepp</code>](#Fepp)  
-<a name="Fepp+innerHTML"></a>
+## document
+The document class from jsdom.
 
-### fepp.innerHTML : <code>string</code>
-**Kind**: instance property of [<code>Fepp</code>](#Fepp)  
-<a name="Fepp+attributes"></a>
+**Kind**: global external  
+**See**: https://developer.mozilla.org/en-US/docs/Web/API/document  
+<a name="external_element"></a>
 
-### fepp.attributes : <code>Array.&lt;string&gt;</code>
-**Kind**: instance property of [<code>Fepp</code>](#Fepp)  
-<a name="Fepp+id"></a>
+## element
+The element class from jsdom.
 
-### fepp.id : <code>string</code>
-**Kind**: instance property of [<code>Fepp</code>](#Fepp)  
-<a name="Fepp+src"></a>
+**Kind**: global external  
+**See**
 
-### fepp.src : <code>string</code>
-**Kind**: instance property of [<code>Fepp</code>](#Fepp)  
-<a name="Fepp+type"></a>
+- [element](https://developer.mozilla.org/en-US/docs/Web/API/element)
+- [jsdom](https://www.npmjs.com/package/jsdom)
+- [WHATWG DOM standards](https://dom.spec.whatwg.org/)
 
-### fepp.type : <code>string</code>
-**Kind**: instance property of [<code>Fepp</code>](#Fepp)  
-<a name="Fepp+value"></a>
-
-### fepp.value : <code>string</code>
-**Kind**: instance property of [<code>Fepp</code>](#Fepp)  
-<a name="Fepp+addClass"></a>
-
-### fepp.addClass(...classList) ⇒
-Adds one or more classes to the element.
-
-**Kind**: instance method of [<code>Fepp</code>](#Fepp)  
-**Returns**: [Element](Element)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| ...classList | <code>string</code> | Class to apply to element. |
-
-<a name="Fepp+setClass"></a>
-
-### fepp.setClass(...classList) ⇒
-Adds one or more classes to the element after removing all previous classes.
-
-**Kind**: instance method of [<code>Fepp</code>](#Fepp)  
-**Returns**: [Element](Element)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| ...classList | <code>string</code> | Class to apply to element. |
-
-<a name="Fepp+removeClass"></a>
-
-### fepp.removeClass(...classList) ⇒
-Removes one or more classes from the element.
-
-**Kind**: instance method of [<code>Fepp</code>](#Fepp)  
-**Returns**: [Element](Element)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| ...classList | <code>string</code> | Class to remove from element. |
-
-<a name="Fepp+setHTML"></a>
-
-### fepp.setHTML(html) ⇒
-**Kind**: instance method of [<code>Fepp</code>](#Fepp)  
-**Returns**: [Element](Element)  
-
-| Param | Type |
-| --- | --- |
-| html | <code>string</code> | 
-
-<a name="Fepp+setAttribute"></a>
-
-### fepp.setAttribute(name, value) ⇒
-**Kind**: instance method of [<code>Fepp</code>](#Fepp)  
-**Returns**: [Element](Element)  
-
-| Param | Type |
-| --- | --- |
-| name | <code>string</code> | 
-| value | <code>string</code> | 
-
-<a name="Fepp+setId"></a>
-
-### fepp.setId(id) ⇒
-**Kind**: instance method of [<code>Fepp</code>](#Fepp)  
-**Returns**: [Element](Element)  
-
-| Param | Type |
-| --- | --- |
-| id | <code>string</code> | 
-
-<a name="Fepp+setSrc"></a>
-
-### fepp.setSrc(src) ⇒
-**Kind**: instance method of [<code>Fepp</code>](#Fepp)  
-**Returns**: [Element](Element)  
-
-| Param | Type |
-| --- | --- |
-| src | <code>string</code> | 
-
-<a name="Fepp+setType"></a>
-
-### fepp.setType(type) ⇒
-**Kind**: instance method of [<code>Fepp</code>](#Fepp)  
-**Returns**: [Element](Element)  
-
-| Param | Type |
-| --- | --- |
-| type | <code>string</code> | 
-
-<a name="Fepp+setValue"></a>
-
-### fepp.setValue(value) ⇒
-**Kind**: instance method of [<code>Fepp</code>](#Fepp)  
-**Returns**: [Element](Element)  
-
-| Param | Type |
-| --- | --- |
-| value | <code>string</code> | 
-
-<a name="Fepp+addJs"></a>
-
-### fepp.addJs(function, ...arguments) ⇒
-Add a JavaScript snippet to the rendered document.All snippets will only be ran at client.The function must be anonymous where the first argument is the element and the rest is the arguments provided in this call.Objects will be JSON stringified while all other argumnets will become a string through their .toString() method.
-
-**Kind**: instance method of [<code>Fepp</code>](#Fepp)  
-**Returns**: [Element](Element)  
-
-| Param | Type |
-| --- | --- |
-| function | <code>function</code> | 
-| ...arguments | <code>any</code> | 
-
-**Example** *(Log the elements inner text to the console)*  
-```js
-element.addJs((el) => console.log(el.innerText));
-```
-**Example** *(Pass local server-side variables)*  
-```js
-const num = 5;
-element.addJs((el, n) => el.innerHTML = n, num);
-```
-<a name="Fepp+addCss"></a>
-
-### fepp.addCss(styles) ⇒
-Add a CSS snippet to the rendered document.If styles is a string, it will be put inside of a declaration block selecting the elementIf styles is an object, it will be handled as if every key is a property with the value as a value.
-
-**Kind**: instance method of [<code>Fepp</code>](#Fepp)  
-**Returns**: [Element](Element)  
-
-| Param | Type |
-| --- | --- |
-| styles | <code>object</code> \| <code>string</code> | 
-
-**Example** *(Usage with string)*  
-```js
-element.addCss(`
- font-size: 2em;
- border-radius: 5px;
-`);
- 
-```
-**Example** *(Usage with object)*  
-```js
-element.addCss({
- "font-size": "2em",
- "border-radius": "5px"
-});
-```
-<a name="Fepp.render"></a>
-
-### Fepp.render() ⇒ <code>string</code>
-Applies all styles and scripts and returns the HTML string of the document.
-
-**Kind**: static method of [<code>Fepp</code>](#Fepp)  
-**Returns**: <code>string</code> - the HTML page  
