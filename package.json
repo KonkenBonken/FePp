@@ -1,6 +1,6 @@
 {
   "name": "fepp",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,8 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "jsdom": "^19.0.0"
+    "jsdom": "^19.0.0",
+    "unique-slug": "^2.0.2"
   },
   "devDependencies": {
     "jsdoc-to-markdown": "^7.1.1"

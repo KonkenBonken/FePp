@@ -1,179 +1,286 @@
-// import { minify as MinifyJS } from "terser"; // possible future use
-// import { minify as MinifyCSS } from 'csso'; // possible future use
 import uniqueString from 'unique-slug';
-import { JSDOM } from "jsdom";
+import { JSDOM } from 'jsdom';
+import { minify as MinifyJS } from 'terser';
+import csso from 'csso';
+const { minify: MinifyCSS } = csso;
 
-/** @external document */
-const document = new JSDOM().window.document;
-
-document.documentElement.setAttribute('lang', 'en');
-document.head.innerHTML += '<meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="UTF-8">';
+let document = new JSDOM().window.document;
 
 /**
- * Sets the title of the document.
- * @param {string} title Title to apply to the document.
- * @return {@link Element}
+ * The document class from jsdom.
+ * @external document
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/document
  */
-document.setTitle = title => document.head.innerHTML += `<title>${obj.title}</title>`;
 
+/**
+ * Creates an instance of Document.
+ * Is ran once at setup
+ * @extends external:document
+ */
+function newDocument() {
+	document.documentElement.setAttribute('lang', 'en');
+	document.head.innerHTML += '<meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="UTF-8">';
 
-class Fepp {
 	/**
-	 * Creates an instance of Element.
-	 * @constructor
-	 * @param {string} [tagName='div'] The desired radius of the circle.
-	 * @param {...string} [classList] Class to apply to element.
-	 * @see setClass
+	 * Sets the title of the document.
+	 * @param {string} title Title to apply to the document.
+	 * @return {string} The HTML DOM string of the title element that was put in the document
 	 */
-	constructor(tagName = 'div', ...classList) {
-		this.element = document.createElement(tagName);
-		if (classList) this.element.setClass(...classList);
-		this.element.Element = this;
+	document.setTitle = title => document.head.innerHTML += `<title>${obj.title}</title>`;
+
+	/**
+	 * Replaces the main document with a new one.
+	 * @return {@external document}
+	 */
+	document.clearDocument = () => document = newDocument();
+
+	// /**
+	//  * Generates a new plain document without affecting the main one.
+	//  * @return {@external document}
+	//  * @see {newDocument}
+	//  */
+	// document.newDocument = newDocument;
+
+	/**
+	 * Add a JavaScript snippet to the rendered document.
+	 * The snippets will only be ran at client.
+	 * The function must be anonymous where the arguments are the arguments provided in this call.
+	 * Objects will be JSON stringified while all other argumnets will be stringified with their .toString() method.
+	 * @param {function} function
+	 * @param {...any} [arguments]
+	 * @example <caption>Log "Hello World" to the console</caption>
+	 * document.addJs(() => console.log("Hello World"));
+	 * @example <caption>Pass local server-side variables</caption>
+	 * const num = 5;
+	 * document.addJs(n => console.log(n), num);
+	 * @return {Element}
+	 */
+	document.addJs = (fun, ...args) => {
+		args = args.map(arg => typeof arg == 'object' ? JSON.stringify(arg) : arg);
+		_jsSnippets.push(`(${fun})(${args.join()})`);
+		return Element;
 	}
 
 	/**
-	 * Adds one or more classes to the element.
+	 * Renders all JavaScript added to the document.
+	 * @param {bool} [minify=false] If the code should be minified
+	 * @return {string|Promise<string>} the JS code. Returns a {Promise} if minify is true
+	 */
+	document.renderJs = minify => {
+		const code = _jsSnippets.join(';');
+		if (!minify) return MinifyJS(code).then(({ code }) => code)
+		else return code;
+	}
+
+	/**
+	 * Renders all CSS added to the document.
+	 * @param {bool} [minify=false] If the code should be minified
+	 * @return {string} the CSS code
+	 */
+	document.renderCss = minify => {
+		const code = _cssSnippets.join(';');
+		if (minify) return MinifyCSS(code).css
+		else return code;
+
+	}
+
+	/**
+	 * Applies all styles and scripts and returns the HTML string of the document.
+	 * @return {string} the HTML page
+	 */
+	document.render = () => {
+		const styleEl = newElement('style').setHTML(document.renderJs()),
+			scriptEl = newElement('script').setHTML(document.renderCss());
+		document.head.append(styleEl, scriptEl);
+
+		const HTML = document.documentElement.outerHTML;
+
+		styleEl.remove();
+		scriptEl.remove();
+		return HTML;
+	}
+
+	return document;
+}
+newDocument();
+
+
+/**
+ * The element class from jsdom.
+ * @external element
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/element element}
+ * @see {@link https://www.npmjs.com/package/jsdom jsdom}
+ * @see {@link https://dom.spec.whatwg.org/ WHATWG DOM standards}
+ */
+
+/**
+ * Creates an instance of Element.
+ * @extends external:element
+ * @param {string} [tagName=div] The tag type.
+ * @param {...string} [classList] Class to apply to element.
+ */
+function newElement(tagName = 'div', ...classList) {
+	const Element = document.createElement(tagName);
+
+	/**
+	 * Identical to {@link https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/add Element.classList.add} but returns the {Element}
+	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/add Element.classList.add}
 	 * @param {...string} classList Class to apply to element.
-	 * @return {@link Element}
+	 * @return {Element}
 	 */
-	addClass(...classList) {
-		this.element.classList.add(...classList)
-		return this;
+	Element.addClass = (...classList) => {
+		Element.classList.add(...classList)
+		return Element;
 	}
+
 
 	/**
 	 * Adds one or more classes to the element after removing all previous classes.
 	 * @param {...string} classList Class to apply to element.
-	 * @return {@link Element}
+	 * @return {Element}
 	 */
-	setClass(...classList) {
-		this.element.className = classList.join(' ');
-		return this;
+	Element.setClass = (...classList) => {
+		Element.className = classList.join(' ');
+		return Element;
 	}
 
 	/**
-	 * Removes one or more classes from the element.
+	 * Identical to {@link https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/remove Element.classList.remove} but returns the {Element}
+	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/remove Element.classList.remove}
 	 * @param {...string} classList Class to remove from element.
-	 * @return {@link Element}
+	 * @return {Element}
 	 */
-	removeClass(...classList) {
-		this.element.classList.remove(...classList)
-		return this;
+	Element.removeClass = (...classList) => {
+		Element.classList.remove(...classList)
+		return Element;
 	}
 
-	/** @type {string[]} */
-	get classes() { return Array.from(this.element.classList) }
+	if (classList) Element.setClass(...classList);
 
-	/** @type {string} */
-	get innerHTML() { return this.element.innerHTML }
 	/**
-	 * @param {string} html
-	 * @return {@link Element}
+	 * Identical to {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML Element.innerHTML = html} but returns the {Element}
+	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML Element.innerHTML = html}
+	 * @param {string} html HTML markup to set as the innerHTML of the element
+	 * @return {Element}
 	 */
-	setHTML(html) {
-		this.element.innerHTML = html;
-		return this;
+	Element.setHTML = (html) => {
+		Element.innerHTML = html;
+		return Element;
 	}
-
-	/** @type {string[]} */
-	get attributes() { return Array.from(this.element.attributes) }
 	/**
+	 * Identical to {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute Element.setAttribute} but returns the {Element}
+	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute Element.setAttribute}
 	 * @param {string} name
-	 * @param {string} value
-	 * @return {@link Element}
+	 * @param {string} [value=""]
+	 * @return {Element}
 	 */
-	setAttribute(name, value) {
-		this.element.setAttribute(name, value);
-		return this;
+	Element.addAttribute = (name, value = '') => {
+		Element.setAttribute(name, value);
+		return Element;
 	}
-
-	/** @type {string} */
-	get id() { return this.element.id }
 	/**
+	 * Identical to {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/id Element.id = id} but returns the {Element}
+	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/id Element.id = id}
 	 * @param {string} id
-	 * @return {@link Element}
+	 * @return {Element}
 	 */
-	setId(id) {
-		this.element.id = id;
-		return this.element.setAttribute('id', id);
+	Element.setId = (id) => {
+		Element.id = id;
+		return Element.addAttribute('id', id);
 	}
-
-	/** @type {string} */
-	get src() { return this.element.src }
 	/**
+	 * Identical to {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/src Element.src = src} but returns the {Element} and also more reliable
+	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/src Element.src = src}
 	 * @param {string} src
-	 * @return {@link Element}
+	 * @return {Element}
 	 */
-	setSrc(src) {
-		this.element.src = src;
-		return this.element.setAttribute('src', src);
+	Element.setSrc = (src) => {
+		Element.src = src;
+		return Element.addAttribute('src', src);
 	}
-
-	/** @type {string} */
-	get type() { return this.element.type }
 	/**
+	 * Identical to {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/type Element.type = type} but returns the {Element} and also more reliable
+	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/type Element.type = type}
 	 * @param {string} type
-	 * @return {@link Element}
+	 * @return {Element}
 	 */
-	setType(type) {
-		this.element.type = type;
-		return this.element.setAttribute('type', type);
+	Element.setType = (type) => {
+		Element.type = type;
+		return Element.addAttribute('type', type);
+	}
+	/**
+	 * Identical to {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/value Element.value = value} but returns the {Element} and also more reliable
+	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/value Element.value = value}
+	 * @param {string} value
+	 * @return {Element}
+	 */
+	Element.setValue = (value) => {
+		Element.value = value;
+		return Element.addAttribute('value', value);
+	}
+	/**
+	 * Identical to {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/append Element.append} but returns the {Element}
+	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/append Element.append}
+	 * @param {...Element} elements
+	 * @return {Element}
+	 */
+	Element.Append = (...elements) => {
+		Element.append(...elements);
+		return Element;
+	}
+	/**
+	 * Identical to {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/prepend Element.prepend} but returns the {Element}
+	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/prepend Element.prepend}
+	 * @param {...Element} elements
+	 * @return {Element}
+	 */
+	Element.Prepend = (...elements) => {
+		Element.prepend(...elements);
+		return Element;
 	}
 
-	/** @type {string} */
-	get value() { return this.element.value }
-	/**
-	 * @param {string} value
-	 * @return {@link Element}
+	/** An array of all the elemets classes
+	 *	@type {string[]}
 	 */
-	setValue(value) {
-		this.element.value = value;
-		return this.element.setAttribute('value', value);
-	}
+	Object.defineProperty(Element, 'classes', {
+		get: function () { return Array.from(this.classList) }
+	});
+
 
 	/**
 	 * @private
+	 * @ignore
 	 * @type {string}
 	 */
-	get uniqueId() {
-		if (!this._uniqueId) {
-			this._uniqueId = uniqueString();
-			this.addClass(this._uniqueId);
+	Object.defineProperty(Element, 'uniqueId', {
+		get: function () {
+			if (!this._uniqueId) {
+				this._uniqueId = uniqueString();
+				this.addAttribute(this._uniqueId);
+			}
+			return Element._uniqueId
 		}
-		return this._uniqueId
-	}
+	});
 
-	/**
-	 * @private
-	 * @ignore
-	 * @type {string[]}
-	 */
-	static _jsSnippets = [];
-	/**
-	 * @private
-	 * @ignore
-	 * @type {string[]}
-	 */
-	static _cssSnippets = [];
 
 	/**
 	 * Add a JavaScript snippet to the rendered document.
-	 * All snippets will only be ran at client.
+	 * The snippets will only be ran at client.
 	 * The function must be anonymous where the first argument is the element and the rest is the arguments provided in this call.
-	 * Objects will be JSON stringified while all other argumnets will become a string through their .toString() method.
+	 * Objects will be JSON stringified while all other argumnets will be stringified with their .toString() method.
 	 * @param {function} function
-	 * @param {...any} arguments
+	 * @param {...any} [arguments]
 	 * @example <caption>Log the elements inner text to the console</caption>
 	 * element.addJs((el) => console.log(el.innerText));
 	 * @example <caption>Pass local server-side variables</caption>
 	 * const num = 5;
 	 * element.addJs((el, n) => el.innerHTML = n, num);
-	 * @return {@link Element}
+	 * @return {Element}
 	 */
-	addJs(fun, ...args) {
+	Element.addJs = (fun, ...args) => {
 		args = args.map(arg => typeof arg == 'object' ? JSON.stringify(arg) : arg);
-		_jsSnippets.push(`(${fun})(document.querySelector('.${this._uniqueId}'),${args.join()})`);
-		return this;
+		_jsSnippets.push(`(${fun})(document.querySelector('[${this._uniqueId}]'),${args.join()})`);
+		return Element;
 	}
 
 	/**
@@ -191,34 +298,41 @@ class Fepp {
 	 *  "font-size": "2em",
 	 *  "border-radius": "5px"
 	 * });
-	 * @return {@link Element}
+	 * @return {Element}
 	 */
-	addCss(styles) {
+	Element.addCss = (styles) => {
 		if (typeof styles == 'string')
 			_cssSnippets.push(`.${this._uniqueId}{${styles}}`)
 		else
-			_cssSnippets.push(`.${this._uniqueId}{${
-				Object.entries(styles).map(([key,value])=>`${key}:${value}`).join(';')
-			}}`);
-		return this;
+			_cssSnippets.push(`[${this._uniqueId}]{${
+					Object.entries(styles).map(([key,value])=>`${key}:${value}`).join(';')
+				}}`);
+		return Element;
 	}
 
-	/**
-	 * Applies all styles and scripts and returns the HTML string of the document.
-	 * @return {string} the HTML page
-	 */
-	static render() {
-		const styleEl = new Fepp('style'),
-			scriptEl = new Fepp('script');
-		styleEl.setHTML(_cssSnippets.join(''));
-		scriptEl.setHTML(_jsSnippets.join(''));
-		document.head.append(styleEl.element, scriptEl.element);
-
-		const HTML = document.documentElement.outerHTML;
-
-		styleEl.element.remove();
-		scriptEl.element.remove();
-		return HTML;
-	}
+	return Element;
 }
-module.exports = { Fepp, document };
+
+/**
+ * @private
+ * @ignore
+ * @type {string[]}
+ */
+const _jsSnippets = [];
+/**
+ * @private
+ * @ignore
+ * @type {string[]}
+ */
+const _cssSnippets = [];
+
+
+export {
+	newElement,
+	document,
+	newDocument,
+	_jsSnippets,
+	_cssSnippets
+};
+
+export default newElement;
