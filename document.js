@@ -2,6 +2,7 @@
  * Creates an instance of Document.
  * Ran once at setup, creating the exported document variable
  * @return {document}
+ * @function newDocument
  */
 export default ({ document, MinifyJS, MinifyCSS }) =>
 function newDocument() {

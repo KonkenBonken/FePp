@@ -3,6 +3,7 @@
  * @param {string} [tagName=div] The tag type.
  * @param {...string} [classList] Class to apply to element.
  * @return {element}
+ * @function newElement
  */
 export default ({ document, uniqueString }) =>
 function newElement(tagName = 'div', ...classList) {
