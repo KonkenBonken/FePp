@@ -7,7 +7,7 @@ const { minify: MinifyCSS } = csso;
 let document = new JSDOM().window.document;
 
 /**
- * The document class from jsdom.
+ * The document class from {@link https://www.npmjs.com/package/jsdom jsdom}.
  * @external document
  * @typedef {external:document} document
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/document document}
@@ -15,7 +15,7 @@ let document = new JSDOM().window.document;
 
 /**
  * Creates an instance of Document.
- * Is ran once at setup
+ * Ran once at setup, creating the exported document variable
  * @return {document}
  */
 function newDocument() {
@@ -32,7 +32,7 @@ function newDocument() {
 
 	/**
 	 * Replaces the main document with a new one.
-	 * @return {@external document}
+	 * @return {document}
 	 * @function document#clearDocument
 	 */
 	document.clearDocument = () => document = newDocument();
@@ -65,6 +65,28 @@ function newDocument() {
 		return Element;
 	}
 
+	/**
+	 * Add a CSS snippet to the rendered document.
+	 * If styles is a string, it will be added to the stylesheet as it is
+	 * If styles is an object, it will be handled as if every key is a selector with the value as an object where every key is a property with the value as a value.
+	 * @param {object|string} styles
+	 *  @example <caption>Usage with string</caption>
+	 * element.addCss(`
+	 *  h1 {
+	 *   font-size: 2em;
+	 *   border-radius: 5px;
+	 *  }
+	 * `);
+	 *  @example <caption>Usage with object</caption>
+	 * element.addCss({
+	 *  "h1": {
+	 *   "font-size": "2em",
+	 *   "border-radius": "5px"
+	 *  }
+	 * });
+	 * @return {document}
+	 * @function document#addCss
+	 */
 	document.addCss = (styles) => {
 		if (typeof styles == 'string')
 			_cssSnippets.push(styles)
@@ -75,6 +97,7 @@ function newDocument() {
       }}`));
 		return Element;
 	}
+
 	/**
 	 * Renders all JavaScript added to the document.
 	 * @param {bool} [minify=false] If the code should be minified
@@ -97,7 +120,6 @@ function newDocument() {
 		const code = _cssSnippets.join(';');
 		if (minify) return MinifyCSS(code).css
 		else return code;
-
 	}
 
 	/**
@@ -123,9 +145,9 @@ newDocument();
 
 
 /**
- * The element class from jsdom.
+ * The element class from {@link https://www.npmjs.com/package/jsdom jsdom}.
  * @external element
- * @typedef {external:element} document
+ * @typedef {external:element} element
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/element element}
  * @see {@link https://www.npmjs.com/package/jsdom jsdom}
  * @see {@link https://dom.spec.whatwg.org/ WHATWG DOM standards}
