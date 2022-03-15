@@ -65,6 +65,16 @@ function newDocument() {
 		return Element;
 	}
 
+	document.addCss = (styles) => {
+		if (typeof styles == 'string')
+			_cssSnippets.push(styles)
+		else
+			_cssSnippets.push(Object.entries(props).map(([key, value]) =>
+				`${key}{${
+        Object.entries(props).map(([key,value])=>`${key}:${value}`).join(';')
+      }}`));
+		return Element;
+	}
 	/**
 	 * Renders all JavaScript added to the document.
 	 * @param {bool} [minify=false] If the code should be minified
