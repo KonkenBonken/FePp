@@ -9,13 +9,14 @@ let document = new JSDOM().window.document;
 /**
  * The document class from jsdom.
  * @external document
- * @see https://developer.mozilla.org/en-US/docs/Web/API/document
+ * @typedef {external:document} document
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/document document}
  */
 
 /**
  * Creates an instance of Document.
  * Is ran once at setup
- * @extends external:document
+ * @return {document}
  */
 function newDocument() {
 	document.documentElement.setAttribute('lang', 'en');
@@ -25,12 +26,14 @@ function newDocument() {
 	 * Sets the title of the document.
 	 * @param {string} title Title to apply to the document.
 	 * @return {string} The HTML DOM string of the title element that was put in the document
+	 * @function document#setTitle
 	 */
 	document.setTitle = title => document.head.innerHTML += `<title>${obj.title}</title>`;
 
 	/**
 	 * Replaces the main document with a new one.
 	 * @return {@external document}
+	 * @function document#clearDocument
 	 */
 	document.clearDocument = () => document = newDocument();
 
@@ -54,6 +57,7 @@ function newDocument() {
 	 * const num = 5;
 	 * document.addJs(n => console.log(n), num);
 	 * @return {Element}
+	 * @function document#addJs
 	 */
 	document.addJs = (fun, ...args) => {
 		args = args.map(arg => typeof arg == 'object' ? JSON.stringify(arg) : arg);
@@ -65,6 +69,7 @@ function newDocument() {
 	 * Renders all JavaScript added to the document.
 	 * @param {bool} [minify=false] If the code should be minified
 	 * @return {string|Promise<string>} the JS code. Returns a {Promise} if minify is true
+	 * @function document#renderJs
 	 */
 	document.renderJs = minify => {
 		const code = _jsSnippets.join(';');
@@ -76,6 +81,7 @@ function newDocument() {
 	 * Renders all CSS added to the document.
 	 * @param {bool} [minify=false] If the code should be minified
 	 * @return {string} the CSS code
+	 * @function document#renderCss
 	 */
 	document.renderCss = minify => {
 		const code = _cssSnippets.join(';');
@@ -87,6 +93,7 @@ function newDocument() {
 	/**
 	 * Applies all styles and scripts and returns the HTML string of the document.
 	 * @return {string} the HTML page
+	 * @function document#render
 	 */
 	document.render = () => {
 		const styleEl = newElement('style').setHTML(document.renderJs()),
@@ -108,6 +115,7 @@ newDocument();
 /**
  * The element class from jsdom.
  * @external element
+ * @typedef {external:element} document
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/element element}
  * @see {@link https://www.npmjs.com/package/jsdom jsdom}
  * @see {@link https://dom.spec.whatwg.org/ WHATWG DOM standards}
@@ -115,9 +123,9 @@ newDocument();
 
 /**
  * Creates an instance of Element.
- * @extends external:element
  * @param {string} [tagName=div] The tag type.
  * @param {...string} [classList] Class to apply to element.
+ * @return {element}
  */
 function newElement(tagName = 'div', ...classList) {
 	const Element = document.createElement(tagName);
@@ -127,6 +135,7 @@ function newElement(tagName = 'div', ...classList) {
 	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/add Element.classList.add}
 	 * @param {...string} classList Class to apply to element.
 	 * @return {Element}
+	 * @function element#addClass
 	 */
 	Element.addClass = (...classList) => {
 		Element.classList.add(...classList)
@@ -138,6 +147,7 @@ function newElement(tagName = 'div', ...classList) {
 	 * Adds one or more classes to the element after removing all previous classes.
 	 * @param {...string} classList Class to apply to element.
 	 * @return {Element}
+	 * @function element#setClass
 	 */
 	Element.setClass = (...classList) => {
 		Element.className = classList.join(' ');
@@ -149,6 +159,7 @@ function newElement(tagName = 'div', ...classList) {
 	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/remove Element.classList.remove}
 	 * @param {...string} classList Class to remove from element.
 	 * @return {Element}
+	 * @function element#removeClass
 	 */
 	Element.removeClass = (...classList) => {
 		Element.classList.remove(...classList)
@@ -162,6 +173,7 @@ function newElement(tagName = 'div', ...classList) {
 	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML Element.innerHTML = html}
 	 * @param {string} html HTML markup to set as the innerHTML of the element
 	 * @return {Element}
+	 * @function element#setHTML
 	 */
 	Element.setHTML = (html) => {
 		Element.innerHTML = html;
@@ -173,6 +185,7 @@ function newElement(tagName = 'div', ...classList) {
 	 * @param {string} name
 	 * @param {string} [value=""]
 	 * @return {Element}
+	 * @function element#addAttribute
 	 */
 	Element.addAttribute = (name, value = '') => {
 		Element.setAttribute(name, value);
@@ -183,6 +196,7 @@ function newElement(tagName = 'div', ...classList) {
 	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/id Element.id = id}
 	 * @param {string} id
 	 * @return {Element}
+	 * @function element#setId
 	 */
 	Element.setId = (id) => {
 		Element.id = id;
@@ -193,6 +207,7 @@ function newElement(tagName = 'div', ...classList) {
 	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/src Element.src = src}
 	 * @param {string} src
 	 * @return {Element}
+	 * @function element#setSrc
 	 */
 	Element.setSrc = (src) => {
 		Element.src = src;
@@ -203,6 +218,7 @@ function newElement(tagName = 'div', ...classList) {
 	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/type Element.type = type}
 	 * @param {string} type
 	 * @return {Element}
+	 * @function element#setType
 	 */
 	Element.setType = (type) => {
 		Element.type = type;
@@ -213,6 +229,7 @@ function newElement(tagName = 'div', ...classList) {
 	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/value Element.value = value}
 	 * @param {string} value
 	 * @return {Element}
+	 * @function element#setValue
 	 */
 	Element.setValue = (value) => {
 		Element.value = value;
@@ -223,6 +240,7 @@ function newElement(tagName = 'div', ...classList) {
 	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/append Element.append}
 	 * @param {...Element} elements
 	 * @return {Element}
+	 * @function element#Append
 	 */
 	Element.Append = (...elements) => {
 		Element.append(...elements);
@@ -233,6 +251,7 @@ function newElement(tagName = 'div', ...classList) {
 	 * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/prepend Element.prepend}
 	 * @param {...Element} elements
 	 * @return {Element}
+	 * @function element#Prepend
 	 */
 	Element.Prepend = (...elements) => {
 		Element.prepend(...elements);
@@ -276,6 +295,7 @@ function newElement(tagName = 'div', ...classList) {
 	 * const num = 5;
 	 * element.addJs((el, n) => el.innerHTML = n, num);
 	 * @return {Element}
+	 * @function element#addJs
 	 */
 	Element.addJs = (fun, ...args) => {
 		args = args.map(arg => typeof arg == 'object' ? JSON.stringify(arg) : arg);
@@ -299,6 +319,7 @@ function newElement(tagName = 'div', ...classList) {
 	 *  "border-radius": "5px"
 	 * });
 	 * @return {Element}
+	 * @function element#addCss
 	 */
 	Element.addCss = (styles) => {
 		if (typeof styles == 'string')
