@@ -1,15 +1,3 @@
-## Functions
-
-<dl>
-<dt><a href="#newDocument">newDocument()</a> ⇒ <code><a href="#document">document</a></code></dt>
-<dd><p>Creates an instance of Document.
-Ran once at setup, creating the exported document variable</p>
-</dd>
-<dt><a href="#newElement">newElement([tagName], [...classList])</a> ⇒ <code><a href="#element">element</a></code></dt>
-<dd><p>Creates an instance of Element.</p>
-</dd>
-</dl>
-
 ## Typedefs
 
 <dl>
@@ -20,24 +8,6 @@ Ran once at setup, creating the exported document variable</p>
 <dd><p>The element class from <a href="https://www.npmjs.com/package/jsdom">jsdom</a>.</p>
 </dd>
 </dl>
-
-<a name="newDocument"></a>
-
-## newDocument() ⇒ [<code>document</code>](#document)
-Creates an instance of Document.Ran once at setup, creating the exported document variable
-
-**Kind**: global function  
-<a name="newElement"></a>
-
-## newElement([tagName], [...classList]) ⇒ [<code>element</code>](#element)
-Creates an instance of Element.
-
-**Kind**: global function  
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| [tagName] | <code>string</code> | <code>&quot;div&quot;</code> | The tag type. |
-| [...classList] | <code>string</code> |  | Class to apply to element. |
 
 <a name="document"></a>
 
